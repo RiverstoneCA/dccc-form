@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>儿童汉语阅读障碍量表 DCCC</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#1a1a2e;--ink2:#3d3d5c;--ink3:#7a7a9a;--line:#e0e0f0;--bg:#f8f8fc;--sur:#ffffff;--acc:#2d4a8a;--acc2:#c8392b;--accl:#eef2fa;--r:8px}
+body{font-family:'Noto Sans SC',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;padding:2rem 1rem 4rem}
+.page{max-width:860px;margin:0 auto}
+.header{text-align:center;padding:2.5rem 2rem 2rem;background:var(--sur);border:1px solid var(--line);border-radius:var(--r);margin-bottom:1.25rem;position:relative;overflow:hidden}
+.header::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--acc),var(--acc2))}
+.htitle{font-family:'Noto Serif SC',serif;font-size:1.7rem;font-weight:600;color:var(--ink);letter-spacing:.05em;line-height:1.3}
+.hsub{font-size:.95rem;color:var(--ink2);margin:.35rem 0 .2rem;font-weight:300}
+.hinst{font-size:.78rem;color:var(--ink3)}
+.card{background:var(--sur);border:1px solid var(--line);border-radius:var(--r);padding:1.5rem;margin-bottom:1.25rem}
+.stitle{font-size:.68rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);border-bottom:1px solid var(--line);padding-bottom:.5rem;margin-bottom:1.25rem}
+.igrid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:.73rem;color:var(--ink3)}
+.field input,.field select{border:1px solid var(--line);border-radius:5px;padding:8px 10px;font-size:.875rem;font-family:'Noto Sans SC',sans-serif;color:var(--ink);background:var(--bg);outline:none;transition:border-color .2s}
+.field input:focus,.field select:focus{border-color:var(--acc);background:#fff}
+.banner{background:var(--accl);border-left:3px solid var(--acc);border-radius:0 var(--r) var(--r) 0;padding:.875rem 1rem;margin-bottom:1.25rem;font-size:.82rem;color:var(--ink2);line-height:1.6}
+.pills{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.5rem}
+.pill{background:#fff;border:1px solid var(--line);border-radius:20px;padding:3px 10px;font-size:.73rem;color:var(--ink2)}
+.pill strong{color:var(--acc)}
+
+/* Item layout: number | question text | radio options stacked vertically */
+.item{display:grid;grid-template-columns:28px 1fr 200px;gap:0 16px;align-items:start;padding:1rem 0;border-bottom:1px solid var(--line)}
+.item:last-child{border-bottom:none}
+.num{font-size:.7rem;color:var(--ink3);padding-top:3px;font-weight:500}
+.zh{font-size:.88rem;color:var(--ink);line-height:1.55}
+.en{font-size:.73rem;color:var(--ink3);margin-top:2px;line-height:1.4;font-weight:300}
+
+/* Radio group — vertical stack */
+.rg{display:flex;flex-direction:column;gap:4px}
+.rb{display:flex;align-items:center;gap:0;cursor:pointer}
+.rb input{display:none}
+.rc{display:flex;align-items:center;gap:8px;padding:4px 8px;border-radius:5px;border:1px solid var(--line);width:100%;transition:all .15s;cursor:pointer;background:#fafafe}
+.rb:hover .rc{border-color:var(--acc);background:var(--accl)}
+.rb input:checked+.rc{background:var(--acc);border-color:var(--acc)}
+.rb input:checked+.rc .rnum{background:rgba(255,255,255,0.25);color:#fff}
+.rb input:checked+.rc .rzh{color:#fff}
+.rb input:checked+.rc .ren{color:rgba(255,255,255,0.75)}
+
+.rnum{min-width:20px;height:20px;border-radius:50%;background:var(--line);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:500;color:var(--ink2);flex-shrink:0}
+.rtxt{display:flex;flex-direction:column;line-height:1.2}
+.rzh{font-size:.75rem;color:var(--ink);font-weight:400}
+.ren{font-size:.65rem;color:var(--ink3);font-weight:300}
+
+.spanel{background:var(--sur);border:1px solid var(--line);border-radius:var(--r);padding:1.5rem;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.slabel{font-size:.73rem;color:var(--ink3);margin-bottom:4px}
+.sval{font-size:2.4rem;font-weight:500;color:var(--ink);line-height:1}
+.sdenom{font-size:1rem;color:var(--ink3);font-weight:300}
+.ssub{font-size:.76rem;color:var(--ink3);margin-top:6px}
+.sright{flex:1;max-width:220px}
+.ptrack{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-bottom:6px}
+.pfill{height:100%;background:linear-gradient(90deg,var(--acc),#5b7fd4);border-radius:3px;width:0%;transition:width .4s ease}
+.plabel{font-size:.73rem;color:var(--ink3);text-align:right}
+.btnrow{display:flex;gap:.75rem;flex-wrap:wrap}
+.btn{padding:10px 28px;border-radius:6px;font-size:.875rem;font-family:'Noto Sans SC',sans-serif;cursor:pointer;font-weight:500;transition:all .15s;border:1px solid transparent}
+.btnp{background:var(--acc);color:#fff;border-color:var(--acc)}
+.btnp:hover{background:#1e3a7a}
+.btns{background:transparent;color:var(--ink2);border-color:var(--line)}
+.btns:hover{border-color:var(--ink3)}
+.btnpr{background:transparent;color:var(--ink3);border-color:var(--line);margin-left:auto}
+.warn{background:#fff8e1;border:1px solid #ffe082;border-radius:var(--r);padding:.75rem 1rem;font-size:.82rem;color:#7a5c00;margin-bottom:1rem;display:none}
+.rcard{background:var(--accl);border:1px solid #c0cce8;border-radius:var(--r);padding:1.25rem 1.5rem;margin-bottom:1.25rem;display:none}
+.rcard h3{font-size:.85rem;font-weight:500;color:var(--acc);margin-bottom:.75rem}
+.rgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}
+.rstat{background:#fff;border-radius:6px;padding:.75rem;text-align:center;border:1px solid var(--line)}
+.rval{font-size:1.5rem;font-weight:500;color:var(--acc)}
+.rlbl{font-size:.68rem;color:var(--ink3);margin-top:2px}
+.disc{font-size:.73rem;color:var(--ink3);line-height:1.6;padding-top:1rem;border-top:1px solid var(--line);margin-top:1.5rem;text-align:center}
+@media print{body{background:#fff;padding:0}.btnrow,.spanel,.rcard{display:none!important}.card{border:1px solid #ccc;break-inside:avoid}}
+@media(max-width:640px){.igrid{grid-template-columns:1fr}.item{grid-template-columns:24px 1fr;}.rg{grid-column:1/-1;margin-top:.5rem}.rzh{font-size:.72rem}.ren{font-size:.62rem}.rgrid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="header">
+  <div class="htitle">儿童汉语阅读障碍量表</div>
+  <div class="hsub">Dyslexia Checklist for Chinese Children (DCCC)</div>
+  <div class="hinst">吴汉荣等编制 · 华中科技大学同济心理卫生研究中心 · 适用于小学三至五年级</div>
+</div>
+
+<div class="card">
+  <div class="stitle">基本信息 · Basic Information</div>
+  <div class="igrid">
+    <div class="field"><label>儿童姓名 / Child's Name</label><input type="text" id="fn" placeholder="请填写"></div>
+    <div class="field"><label>年龄 / Age</label><input type="text" id="fa" placeholder="岁"></div>
+    <div class="field"><label>就读年级 / Grade</label><select id="fg"><option value="">请选择</option><option>三年级 Grade 3</option><option>四年级 Grade 4</option><option>五年级 Grade 5</option></select></div>
+    <div class="field"><label>评估日期 / Date</label><input type="date" id="fd"></div>
+    <div class="field"><label>填表人 / Rater</label><input type="text" id="fr" placeholder="姓名"></div>
+    <div class="field"><label>关系 / Relationship</label><select id="frl"><option value="">请选择</option><option>家长 Parent</option><option>教师 Teacher</option><option>其他 Other</option></select></div>
+  </div>
+</div>
+
+<div class="banner">
+  <strong>填写说明：</strong>本表对所列的57个条目分别规定了5个等级，请根据孩子实际情况选择最接近的答案。每题只选一个答案。<br>
+  <strong>Instructions:</strong> Rate each of the 57 items on a 5-point scale. Select one answer per item.
+  <div class="pills">
+    <span class="pill"><strong>1</strong> 从未出现 Never</span>
+    <span class="pill"><strong>2</strong> 偶尔出现 Rarely</span>
+    <span class="pill"><strong>3</strong> 有时出现 Sometimes</span>
+    <span class="pill"><strong>4</strong> 较常出现 Often</span>
+    <span class="pill"><strong>5</strong> 经常出现 Always</span>
+  </div>
+</div>
+
+<div class="card">
+  <div class="stitle">观察项目 · Observation Items (57 items)</div>
+  <div class="item" id="row0"><div class="num">1</div><div class="txt"><div class="zh">经常混淆字母：如将b看成d，p看成q，u看成n，w看成m等。</div><div class="en">Often confuses letters (e.g., b/d, p/q, u/n, w/m).</div></div><div class="rg"><label class="rb"><input type="radio" name="q0" value="1" onchange="sa(0,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q0" value="2" onchange="sa(0,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q0" value="3" onchange="sa(0,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q0" value="4" onchange="sa(0,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q0" value="5" onchange="sa(0,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row1"><div class="num">2</div><div class="txt"><div class="zh">经常颠倒字的偏旁部首。</div><div class="en">Often reverses radicals in characters.</div></div><div class="rg"><label class="rb"><input type="radio" name="q1" value="1" onchange="sa(1,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q1" value="2" onchange="sa(1,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q1" value="3" onchange="sa(1,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q1" value="4" onchange="sa(1,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q1" value="5" onchange="sa(1,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row2"><div class="num">3</div><div class="txt"><div class="zh">阅读时重复阅读同一行或者跳行阅读。</div><div class="en">Repeats reading the same line or skips lines when reading.</div></div><div class="rg"><label class="rb"><input type="radio" name="q2" value="1" onchange="sa(2,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q2" value="2" onchange="sa(2,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q2" value="3" onchange="sa(2,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q2" value="4" onchange="sa(2,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q2" value="5" onchange="sa(2,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row3"><div class="num">4</div><div class="txt"><div class="zh">上课或做作业时注意力不集中。</div><div class="en">Has difficulty concentrating in class or while doing homework.</div></div><div class="rg"><label class="rb"><input type="radio" name="q3" value="1" onchange="sa(3,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q3" value="2" onchange="sa(3,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q3" value="3" onchange="sa(3,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q3" value="4" onchange="sa(3,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q3" value="5" onchange="sa(3,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row4"><div class="num">5</div><div class="txt"><div class="zh">放大字体、减少每页内容或用物件标记读到哪里可以改善阅读。</div><div class="en">Enlarging font, reducing content per page, or marking reading position can improve reading.</div></div><div class="rg"><label class="rb"><input type="radio" name="q4" value="1" onchange="sa(4,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q4" value="2" onchange="sa(4,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q4" value="3" onchange="sa(4,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q4" value="4" onchange="sa(4,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q4" value="5" onchange="sa(4,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row5"><div class="num">6</div><div class="txt"><div class="zh">读字和写字时经常混淆形状相似的字，如拒和柜。</div><div class="en">Frequently confuses similarly shaped characters, such as 拒 and 柜.</div></div><div class="rg"><label class="rb"><input type="radio" name="q5" value="1" onchange="sa(5,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q5" value="2" onchange="sa(5,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q5" value="3" onchange="sa(5,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q5" value="4" onchange="sa(5,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q5" value="5" onchange="sa(5,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row6"><div class="num">7</div><div class="txt"><div class="zh">前后排列错误，例如将was看成saw，将on看成no，将书写看成写书。</div><div class="en">Mistakes in order, such as seeing was as saw, on as no, or shu xie as xie shu.</div></div><div class="rg"><label class="rb"><input type="radio" name="q6" value="1" onchange="sa(6,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q6" value="2" onchange="sa(6,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q6" value="3" onchange="sa(6,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q6" value="4" onchange="sa(6,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q6" value="5" onchange="sa(6,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row7"><div class="num">8</div><div class="txt"><div class="zh">听写中分不清同音字，如拒和据。</div><div class="en">Confuses homophones in dictation, such as 拒 and 据.</div></div><div class="rg"><label class="rb"><input type="radio" name="q7" value="1" onchange="sa(7,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q7" value="2" onchange="sa(7,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q7" value="3" onchange="sa(7,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q7" value="4" onchange="sa(7,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q7" value="5" onchange="sa(7,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row8"><div class="num">9</div><div class="txt"><div class="zh">写字字迹非常潦草，笔划不清晰，难以辨认。</div><div class="en">Handwriting is often very poor and difficult to read.</div></div><div class="rg"><label class="rb"><input type="radio" name="q8" value="1" onchange="sa(8,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q8" value="2" onchange="sa(8,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q8" value="3" onchange="sa(8,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q8" value="4" onchange="sa(8,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q8" value="5" onchange="sa(8,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row9"><div class="num">10</div><div class="txt"><div class="zh">常常不理解字、词在句子中的意思。</div><div class="en">Often does not understand the meaning of characters/words in sentences.</div></div><div class="rg"><label class="rb"><input type="radio" name="q9" value="1" onchange="sa(9,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q9" value="2" onchange="sa(9,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q9" value="3" onchange="sa(9,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q9" value="4" onchange="sa(9,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q9" value="5" onchange="sa(9,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row10"><div class="num">11</div><div class="txt"><div class="zh">分不清汉字的声调，如情（第二声），清（第一声）。</div><div class="en">Cannot distinguish tonal differences, like 情 (2nd tone) and 清 (1st tone).</div></div><div class="rg"><label class="rb"><input type="radio" name="q10" value="1" onchange="sa(10,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q10" value="2" onchange="sa(10,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q10" value="3" onchange="sa(10,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q10" value="4" onchange="sa(10,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q10" value="5" onchange="sa(10,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row11"><div class="num">12</div><div class="txt"><div class="zh">计数困难，数学计算能力差。</div><div class="en">Has difficulty counting and poor math calculation ability.</div></div><div class="rg"><label class="rb"><input type="radio" name="q11" value="1" onchange="sa(11,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q11" value="2" onchange="sa(11,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q11" value="3" onchange="sa(11,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q11" value="4" onchange="sa(11,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q11" value="5" onchange="sa(11,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row12"><div class="num">13</div><div class="txt"><div class="zh">父母或其他家庭成员也有阅读、语言或书写方面的问题。</div><div class="en">Parents or family members also have reading, language, or writing issues.</div></div><div class="rg"><label class="rb"><input type="radio" name="q12" value="1" onchange="sa(12,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q12" value="2" onchange="sa(12,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q12" value="3" onchange="sa(12,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q12" value="4" onchange="sa(12,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q12" value="5" onchange="sa(12,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row13"><div class="num">14</div><div class="txt"><div class="zh">看图时，抓不住主要内容，只看到琐碎细节。</div><div class="en">When looking at pictures, fails to grasp the main content, only noticing trivial details.</div></div><div class="rg"><label class="rb"><input type="radio" name="q13" value="1" onchange="sa(13,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q13" value="2" onchange="sa(13,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q13" value="3" onchange="sa(13,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q13" value="4" onchange="sa(13,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q13" value="5" onchange="sa(13,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row14"><div class="num">15</div><div class="txt"><div class="zh">口头交际能力差，不善于口语表达。</div><div class="en">Poor oral communication skills, not good at verbal expression.</div></div><div class="rg"><label class="rb"><input type="radio" name="q14" value="1" onchange="sa(14,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q14" value="2" onchange="sa(14,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q14" value="3" onchange="sa(14,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q14" value="4" onchange="sa(14,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q14" value="5" onchange="sa(14,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row15"><div class="num">16</div><div class="txt"><div class="zh">书写速度慢，经常很晚才完成作业。</div><div class="en">Slow writing speed, often finishes homework very late.</div></div><div class="rg"><label class="rb"><input type="radio" name="q15" value="1" onchange="sa(15,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q15" value="2" onchange="sa(15,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q15" value="3" onchange="sa(15,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q15" value="4" onchange="sa(15,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q15" value="5" onchange="sa(15,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row16"><div class="num">17</div><div class="txt"><div class="zh">听不懂正常速度的谈话，只有缓慢重复时才能理解。</div><div class="en">Cannot understand normal-speed conversations; only comprehends when repeated slowly.</div></div><div class="rg"><label class="rb"><input type="radio" name="q16" value="1" onchange="sa(16,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q16" value="2" onchange="sa(16,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q16" value="3" onchange="sa(16,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q16" value="4" onchange="sa(16,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q16" value="5" onchange="sa(16,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row17"><div class="num">18</div><div class="txt"><div class="zh">不能按照大人的指令做事情。</div><div class="en">Cannot follow instructions given by adults.</div></div><div class="rg"><label class="rb"><input type="radio" name="q17" value="1" onchange="sa(17,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q17" value="2" onchange="sa(17,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q17" value="3" onchange="sa(17,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q17" value="4" onchange="sa(17,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q17" value="5" onchange="sa(17,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row18"><div class="num">19</div><div class="txt"><div class="zh">无法用学过的字、词造句子。</div><div class="en">Unable to create sentences using learned words and phrases.</div></div><div class="rg"><label class="rb"><input type="radio" name="q18" value="1" onchange="sa(18,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q18" value="2" onchange="sa(18,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q18" value="3" onchange="sa(18,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q18" value="4" onchange="sa(18,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q18" value="5" onchange="sa(18,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row19"><div class="num">20</div><div class="txt"><div class="zh">写字时经常涂抹、修改。</div><div class="en">Frequently erases or modifies while writing.</div></div><div class="rg"><label class="rb"><input type="radio" name="q19" value="1" onchange="sa(19,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q19" value="2" onchange="sa(19,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q19" value="3" onchange="sa(19,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q19" value="4" onchange="sa(19,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q19" value="5" onchange="sa(19,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row20"><div class="num">21</div><div class="txt"><div class="zh">阅读过程中常常分不清读音相近的字，如轻和清。</div><div class="en">Often cannot distinguish phonetically similar characters, such as 轻 and 清.</div></div><div class="rg"><label class="rb"><input type="radio" name="q20" value="1" onchange="sa(20,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q20" value="2" onchange="sa(20,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q20" value="3" onchange="sa(20,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q20" value="4" onchange="sa(20,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q20" value="5" onchange="sa(20,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row21"><div class="num">22</div><div class="txt"><div class="zh">不能熟练使用汉语拼音。</div><div class="en">Cannot proficiently use Chinese Pinyin.</div></div><div class="rg"><label class="rb"><input type="radio" name="q21" value="1" onchange="sa(21,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q21" value="2" onchange="sa(21,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q21" value="3" onchange="sa(21,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q21" value="4" onchange="sa(21,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q21" value="5" onchange="sa(21,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row22"><div class="num">23</div><div class="txt"><div class="zh">听不懂口头讲解，跟不上正常的学习速度。</div><div class="en">Does not understand verbal explanations; cannot keep pace with normal learning speed.</div></div><div class="rg"><label class="rb"><input type="radio" name="q22" value="1" onchange="sa(22,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q22" value="2" onchange="sa(22,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q22" value="3" onchange="sa(22,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q22" value="4" onchange="sa(22,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q22" value="5" onchange="sa(22,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row23"><div class="num">24</div><div class="txt"><div class="zh">朗读时经常读着读着不知读到何处。</div><div class="en">Often loses track of where they are while reading aloud.</div></div><div class="rg"><label class="rb"><input type="radio" name="q23" value="1" onchange="sa(23,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q23" value="2" onchange="sa(23,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q23" value="3" onchange="sa(23,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q23" value="4" onchange="sa(23,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q23" value="5" onchange="sa(23,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row24"><div class="num">25</div><div class="txt"><div class="zh">不理解上下、周围、首尾、前后、向上和向下等方位概念。</div><div class="en">Does not understand spatial concepts such as up/down, surroundings, front/back, etc.</div></div><div class="rg"><label class="rb"><input type="radio" name="q24" value="1" onchange="sa(24,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q24" value="2" onchange="sa(24,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q24" value="3" onchange="sa(24,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q24" value="4" onchange="sa(24,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q24" value="5" onchange="sa(24,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row25"><div class="num">26</div><div class="txt"><div class="zh">认字能力虽好，却不知道字的意义。</div><div class="en">Good character recognition but does not know the meaning of characters.</div></div><div class="rg"><label class="rb"><input type="radio" name="q25" value="1" onchange="sa(25,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q25" value="2" onchange="sa(25,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q25" value="3" onchange="sa(25,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q25" value="4" onchange="sa(25,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q25" value="5" onchange="sa(25,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row26"><div class="num">27</div><div class="txt"><div class="zh">儿童难以记住公式、乘法口诀等。</div><div class="en">Finds it difficult to remember formulas, multiplication tables, etc.</div></div><div class="rg"><label class="rb"><input type="radio" name="q26" value="1" onchange="sa(26,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q26" value="2" onchange="sa(26,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q26" value="3" onchange="sa(26,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q26" value="4" onchange="sa(26,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q26" value="5" onchange="sa(26,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row27"><div class="num">28</div><div class="txt"><div class="zh">写字容易写错，如总是多一笔或少一笔。</div><div class="en">Easily writes errors, such as always adding or omitting strokes.</div></div><div class="rg"><label class="rb"><input type="radio" name="q27" value="1" onchange="sa(27,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q27" value="2" onchange="sa(27,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q27" value="3" onchange="sa(27,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q27" value="4" onchange="sa(27,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q27" value="5" onchange="sa(27,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row28"><div class="num">29</div><div class="txt"><div class="zh">不理解时间关系：如昨天、今天和明天，前与后，15分钟与2小时，快与慢等。</div><div class="en">Does not understand time relations: yesterday/today/tomorrow, 15 min vs. 2 hours, fast/slow, etc.</div></div><div class="rg"><label class="rb"><input type="radio" name="q28" value="1" onchange="sa(28,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q28" value="2" onchange="sa(28,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q28" value="3" onchange="sa(28,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q28" value="4" onchange="sa(28,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q28" value="5" onchange="sa(28,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row29"><div class="num">30</div><div class="txt"><div class="zh">没有幽默感，听不懂玩笑话或双关语。</div><div class="en">Lacks a sense of humor; does not understand jokes or puns.</div></div><div class="rg"><label class="rb"><input type="radio" name="q29" value="1" onchange="sa(29,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q29" value="2" onchange="sa(29,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q29" value="3" onchange="sa(29,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q29" value="4" onchange="sa(29,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q29" value="5" onchange="sa(29,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row30"><div class="num">31</div><div class="txt"><div class="zh">写作吃力，语文测验时作文分数低。</div><div class="en">Writing is laborious; scores low in writing tests.</div></div><div class="rg"><label class="rb"><input type="radio" name="q30" value="1" onchange="sa(30,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q30" value="2" onchange="sa(30,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q30" value="3" onchange="sa(30,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q30" value="4" onchange="sa(30,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q30" value="5" onchange="sa(30,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row31"><div class="num">32</div><div class="txt"><div class="zh">不理解人的情绪，如不领会愉快、反感之类的情绪表现。</div><div class="en">Does not understand human emotions, such as happy or disgusted.</div></div><div class="rg"><label class="rb"><input type="radio" name="q31" value="1" onchange="sa(31,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q31" value="2" onchange="sa(31,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q31" value="3" onchange="sa(31,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q31" value="4" onchange="sa(31,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q31" value="5" onchange="sa(31,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row32"><div class="num">33</div><div class="txt"><div class="zh">难以掌握数学概念（例如多与少，大于与小于）；不会估算。</div><div class="en">Struggles with math concepts (e.g., more/less, greater than/less than); cannot estimate.</div></div><div class="rg"><label class="rb"><input type="radio" name="q32" value="1" onchange="sa(32,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q32" value="2" onchange="sa(32,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q32" value="3" onchange="sa(32,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q32" value="4" onchange="sa(32,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q32" value="5" onchange="sa(32,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row33"><div class="num">34</div><div class="txt"><div class="zh">重复别人所说的数字时，超不过六位数字。</div><div class="en">Cannot repeat numbers stated by others exceeding six digits.</div></div><div class="rg"><label class="rb"><input type="radio" name="q33" value="1" onchange="sa(33,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q33" value="2" onchange="sa(33,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q33" value="3" onchange="sa(33,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q33" value="4" onchange="sa(33,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q33" value="5" onchange="sa(33,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row34"><div class="num">35</div><div class="txt"><div class="zh">熟练掌握的词汇很少。</div><div class="en">Has a very limited vocabulary.</div></div><div class="rg"><label class="rb"><input type="radio" name="q34" value="1" onchange="sa(34,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q34" value="2" onchange="sa(34,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q34" value="3" onchange="sa(34,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q34" value="4" onchange="sa(34,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q34" value="5" onchange="sa(34,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row35"><div class="num">36</div><div class="txt"><div class="zh">常常不愿朗读或朗读时发音不清晰。</div><div class="en">Often reluctant to read aloud, or mispronounces when reading aloud.</div></div><div class="rg"><label class="rb"><input type="radio" name="q35" value="1" onchange="sa(35,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q35" value="2" onchange="sa(35,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q35" value="3" onchange="sa(35,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q35" value="4" onchange="sa(35,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q35" value="5" onchange="sa(35,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row36"><div class="num">37</div><div class="txt"><div class="zh">朗读时总是丢字、加字、改字、串字。</div><div class="en">Consistently omits, adds, changes, or jumbles characters when reading aloud.</div></div><div class="rg"><label class="rb"><input type="radio" name="q36" value="1" onchange="sa(36,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q36" value="2" onchange="sa(36,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q36" value="3" onchange="sa(36,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q36" value="4" onchange="sa(36,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q36" value="5" onchange="sa(36,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row37"><div class="num">38</div><div class="txt"><div class="zh">记不住物品名称，只能说那个东西。</div><div class="en">Cannot remember names of objects; only refers to them as that thing.</div></div><div class="rg"><label class="rb"><input type="radio" name="q37" value="1" onchange="sa(37,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q37" value="2" onchange="sa(37,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q37" value="3" onchange="sa(37,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q37" value="4" onchange="sa(37,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q37" value="5" onchange="sa(37,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row38"><div class="num">39</div><div class="txt"><div class="zh">写字常常超出格子。</div><div class="en">Handwriting often exceeds the lines/boxes.</div></div><div class="rg"><label class="rb"><input type="radio" name="q38" value="1" onchange="sa(38,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q38" value="2" onchange="sa(38,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q38" value="3" onchange="sa(38,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q38" value="4" onchange="sa(38,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q38" value="5" onchange="sa(38,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row39"><div class="num">40</div><div class="txt"><div class="zh">富于说服力和表现力的语言太少。</div><div class="en">Lacks persuasive and expressive language.</div></div><div class="rg"><label class="rb"><input type="radio" name="q39" value="1" onchange="sa(39,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q39" value="2" onchange="sa(39,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q39" value="3" onchange="sa(39,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q39" value="4" onchange="sa(39,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q39" value="5" onchange="sa(39,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row40"><div class="num">41</div><div class="txt"><div class="zh">写作能力差：标点符号、空一行、空两格等等常搞错。</div><div class="en">Poor writing skills: often confuses punctuation, spacing, etc.</div></div><div class="rg"><label class="rb"><input type="radio" name="q40" value="1" onchange="sa(40,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q40" value="2" onchange="sa(40,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q40" value="3" onchange="sa(40,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q40" value="4" onchange="sa(40,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q40" value="5" onchange="sa(40,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row41"><div class="num">42</div><div class="txt"><div class="zh">阅读时喜欢出声。</div><div class="en">Enjoys reading aloud (prefers to subvocalize when reading).</div></div><div class="rg"><label class="rb"><input type="radio" name="q41" value="1" onchange="sa(41,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q41" value="2" onchange="sa(41,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q41" value="3" onchange="sa(41,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q41" value="4" onchange="sa(41,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q41" value="5" onchange="sa(41,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row42"><div class="num">43</div><div class="txt"><div class="zh">朗读时总是反复重复某些字词。</div><div class="en">Often repeats certain words when reading aloud.</div></div><div class="rg"><label class="rb"><input type="radio" name="q42" value="1" onchange="sa(42,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q42" value="2" onchange="sa(42,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q42" value="3" onchange="sa(42,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q42" value="4" onchange="sa(42,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q42" value="5" onchange="sa(42,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row43"><div class="num">44</div><div class="txt"><div class="zh">常常认不出或不知道学过的字是什么意思。</div><div class="en">Often fails to recognize or know the meanings of previously learned characters.</div></div><div class="rg"><label class="rb"><input type="radio" name="q43" value="1" onchange="sa(43,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q43" value="2" onchange="sa(43,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q43" value="3" onchange="sa(43,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q43" value="4" onchange="sa(43,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q43" value="5" onchange="sa(43,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row44"><div class="num">45</div><div class="txt"><div class="zh">易记住人名而不易记住人脸。</div><div class="en">Easily remembers names but struggles to recognize faces.</div></div><div class="rg"><label class="rb"><input type="radio" name="q44" value="1" onchange="sa(44,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q44" value="2" onchange="sa(44,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q44" value="3" onchange="sa(44,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q44" value="4" onchange="sa(44,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q44" value="5" onchange="sa(44,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row45"><div class="num">46</div><div class="txt"><div class="zh">语文考试时阅读理解部分得分低。</div><div class="en">Scores low in reading comprehension during language exams.</div></div><div class="rg"><label class="rb"><input type="radio" name="q45" value="1" onchange="sa(45,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q45" value="2" onchange="sa(45,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q45" value="3" onchange="sa(45,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q45" value="4" onchange="sa(45,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q45" value="5" onchange="sa(45,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row46"><div class="num">47</div><div class="txt"><div class="zh">不喜欢阅读，也不喜欢听人阅读。</div><div class="en">Dislikes reading and does not enjoy listening to others read.</div></div><div class="rg"><label class="rb"><input type="radio" name="q46" value="1" onchange="sa(46,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q46" value="2" onchange="sa(46,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q46" value="3" onchange="sa(46,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q46" value="4" onchange="sa(46,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q46" value="5" onchange="sa(46,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row47"><div class="num">48</div><div class="txt"><div class="zh">写字、画画时笔划不均匀，歪歪斜斜。</div><div class="en">Writes or draws with uneven strokes, often crooked.</div></div><div class="rg"><label class="rb"><input type="radio" name="q47" value="1" onchange="sa(47,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q47" value="2" onchange="sa(47,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q47" value="3" onchange="sa(47,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q47" value="4" onchange="sa(47,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q47" value="5" onchange="sa(47,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row48"><div class="num">49</div><div class="txt"><div class="zh">孩子不经常阅读课外读物。</div><div class="en">Does not frequently read extracurricular books.</div></div><div class="rg"><label class="rb"><input type="radio" name="q48" value="1" onchange="sa(48,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q48" value="2" onchange="sa(48,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q48" value="3" onchange="sa(48,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q48" value="4" onchange="sa(48,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q48" value="5" onchange="sa(48,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row49"><div class="num">50</div><div class="txt"><div class="zh">能正确阅读，但是有口无心，理解较差。</div><div class="en">Reads correctly but lacks understanding; poor comprehension.</div></div><div class="rg"><label class="rb"><input type="radio" name="q49" value="1" onchange="sa(49,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q49" value="2" onchange="sa(49,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q49" value="3" onchange="sa(49,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q49" value="4" onchange="sa(49,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q49" value="5" onchange="sa(49,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row50"><div class="num">51</div><div class="txt"><div class="zh">考试或写作业时，常常出现题意理解错误。</div><div class="en">Frequently misunderstands questions during exams or homework.</div></div><div class="rg"><label class="rb"><input type="radio" name="q50" value="1" onchange="sa(50,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q50" value="2" onchange="sa(50,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q50" value="3" onchange="sa(50,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q50" value="4" onchange="sa(50,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q50" value="5" onchange="sa(50,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row51"><div class="num">52</div><div class="txt"><div class="zh">阅读写作又慢又差。</div><div class="en">Reading and writing are both slow and poor quality.</div></div><div class="rg"><label class="rb"><input type="radio" name="q51" value="1" onchange="sa(51,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q51" value="2" onchange="sa(51,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q51" value="3" onchange="sa(51,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q51" value="4" onchange="sa(51,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q51" value="5" onchange="sa(51,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row52"><div class="num">53</div><div class="txt"><div class="zh">语言表达尚可，但写的作文过于简单，内容枯燥。</div><div class="en">Verbal expression is acceptable, but written compositions are too simple and lack content.</div></div><div class="rg"><label class="rb"><input type="radio" name="q52" value="1" onchange="sa(52,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q52" value="2" onchange="sa(52,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q52" value="3" onchange="sa(52,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q52" value="4" onchange="sa(52,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q52" value="5" onchange="sa(52,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row53"><div class="num">54</div><div class="txt"><div class="zh">经常忘记一个学过的字应该怎样写。</div><div class="en">Often forgets how to write a previously learned character.</div></div><div class="rg"><label class="rb"><input type="radio" name="q53" value="1" onchange="sa(53,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q53" value="2" onchange="sa(53,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q53" value="3" onchange="sa(53,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q53" value="4" onchange="sa(53,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q53" value="5" onchange="sa(53,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row54"><div class="num">55</div><div class="txt"><div class="zh">读书时常常有看不清楚，或者看到的字有颤抖和闪烁的感觉。</div><div class="en">Often sees unclear characters, or experiences shaking/flickering letters when reading.</div></div><div class="rg"><label class="rb"><input type="radio" name="q54" value="1" onchange="sa(54,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q54" value="2" onchange="sa(54,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q54" value="3" onchange="sa(54,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q54" value="4" onchange="sa(54,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q54" value="5" onchange="sa(54,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row55"><div class="num">56</div><div class="txt"><div class="zh">对大人的吩咐，前讲后忘记。</div><div class="en">Forgets instructions given by adults shortly after being told.</div></div><div class="rg"><label class="rb"><input type="radio" name="q55" value="1" onchange="sa(55,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q55" value="2" onchange="sa(55,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q55" value="3" onchange="sa(55,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q55" value="4" onchange="sa(55,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q55" value="5" onchange="sa(55,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+<div class="item" id="row56"><div class="num">57</div><div class="txt"><div class="zh">数学应用题常常不能正确解答，数学考试时应用题部分得分低。</div><div class="en">Frequently fails to correctly solve math word problems; scores low on applied questions in math exams.</div></div><div class="rg"><label class="rb"><input type="radio" name="q56" value="1" onchange="sa(56,1)"><span class="rc"><span class="rnum">1</span><span class="rtxt"><span class="rzh">从未出现</span><span class="ren">Never</span></span></span></label>
+<label class="rb"><input type="radio" name="q56" value="2" onchange="sa(56,2)"><span class="rc"><span class="rnum">2</span><span class="rtxt"><span class="rzh">偶尔出现</span><span class="ren">Rarely</span></span></span></label>
+<label class="rb"><input type="radio" name="q56" value="3" onchange="sa(56,3)"><span class="rc"><span class="rnum">3</span><span class="rtxt"><span class="rzh">有时出现</span><span class="ren">Sometimes</span></span></span></label>
+<label class="rb"><input type="radio" name="q56" value="4" onchange="sa(56,4)"><span class="rc"><span class="rnum">4</span><span class="rtxt"><span class="rzh">较常出现</span><span class="ren">Often</span></span></span></label>
+<label class="rb"><input type="radio" name="q56" value="5" onchange="sa(56,5)"><span class="rc"><span class="rnum">5</span><span class="rtxt"><span class="rzh">经常出现</span><span class="ren">Always</span></span></span></label>
+</div></div>
+</div>
+
+<div class="spanel">
+  <div>
+    <div class="slabel">总分 / Total Score</div>
+    <div><span class="sval" id="sv">—</span> <span class="sdenom">/ 285</span></div>
+    <div class="ssub" id="al">0 / 57 项已填写</div>
+  </div>
+  <div class="sright">
+    <div class="ptrack"><div class="pfill" id="pf"></div></div>
+    <div class="plabel" id="pl"></div>
+  </div>
+</div>
+
+<div class="rcard" id="rc">
+  <h3>评估结果摘要 · Assessment Summary</h3>
+  <div id="rc-msg" style="display:none;background:#d4edda;border:1px solid #a8d5b5;border-radius:6px;padding:8px 12px;font-size:.82rem;color:#1a5c30;margin-bottom:.75rem;">✓ 提交成功！结果已发送至您的 Formspree 收件箱。<br>Submission successful! Results have been sent to your Formspree inbox.</div>
+  <div class="rgrid">
+    <div class="rstat"><div class="rval" id="rt">—</div><div class="rlbl">总分 Total Score</div></div>
+    <div class="rstat"><div class="rval" id="rp">—</div><div class="rlbl">百分比 Percentage</div></div>
+    <div class="rstat"><div class="rval" id="ra">—</div><div class="rlbl">平均分 Average</div></div>
+  </div>
+</div>
+
+<div class="warn" id="wb"></div>
+
+<div class="btnrow">
+  <button class="btn btnp" onclick="sub()">提交评估 Submit</button>
+  <button class="btn btns" onclick="rst()">重置 Reset</button>
+  <button class="btn btnpr" onclick="window.print()">打印 Print</button>
+</div>
+
+<div class="disc">
+  注：本量表供观察参考之用，不作为临床诊断依据。如有疑虑请咨询专业人士。<br>
+  Note: This scale is for observational reference only and does not constitute a clinical diagnosis. Please consult a professional if you have concerns.
+</div>
+</div>
+<script>
+var ans=new Array(57).fill(0);
+function sa(i,v){ans[i]=v;upd();}
+function upd(){
+  var done=ans.filter(function(a){return a>0;}).length;
+  var tot=ans.reduce(function(s,a){return s+a;},0);
+  document.getElementById('al').textContent=done+' / 57 项已填写';
+  if(done>0){
+    document.getElementById('sv').textContent=tot;
+    var p=Math.round(tot/285*100);
+    document.getElementById('pl').textContent=p+'%';
+    document.getElementById('pf').style.width=p+'%';
+  }
+}
+var itemLabels=[
+  "Q1 混淆字母","Q2 颠倒偏旁","Q3 重复/跳行阅读","Q4 注意力不集中","Q5 辅助改善阅读",
+  "Q6 混淆形似字","Q7 前后排列错误","Q8 混淆同音字","Q9 字迹潦草","Q10 不理解字词意思",
+  "Q11 分不清声调","Q12 计数/数学困难","Q13 家族阅读问题","Q14 看图抓不住重点","Q15 口头交际差",
+  "Q16 书写速度慢","Q17 听不懂正常谈话","Q18 不能按指令行事","Q19 无法用词造句","Q20 经常涂改",
+  "Q21 分不清读音相近字","Q22 不会汉语拼音","Q23 听不懂口头讲解","Q24 朗读迷失位置","Q25 不理解方位概念",
+  "Q26 认字但不知意义","Q27 难记公式口诀","Q28 写字多笔少笔","Q29 不理解时间关系","Q30 无幽默感",
+  "Q31 写作吃力","Q32 不理解情绪","Q33 数学概念困难","Q34 数字记忆不超六位","Q35 词汇量少",
+  "Q36 不愿朗读/发音不清","Q37 朗读丢字加字","Q38 记不住物品名称","Q39 写字超出格子","Q40 语言表达缺乏说服力",
+  "Q41 标点格式错误","Q42 阅读喜欢出声","Q43 朗读重复字词","Q44 认不出学过的字","Q45 记名忘脸",
+  "Q46 阅读理解得分低","Q47 不喜欢阅读","Q48 笔划不均匀","Q49 不读课外书","Q50 阅读理解差",
+  "Q51 理解题意错误","Q52 阅读写作慢且差","Q53 作文简单枯燥","Q54 忘记字的写法","Q55 看字模糊/颤抖",
+  "Q56 忘记大人吩咐","Q57 数学应用题困难"
+];
+var scaleText=["","1-从未出现(Never)","2-偶尔出现(Rarely)","3-有时出现(Sometimes)","4-较常出现(Often)","5-经常出现(Always)"];
+
+function sub(){
+  var un=[];
+  for(var i=0;i<57;i++){if(ans[i]===0)un.push(i+1);}
+  var wb=document.getElementById('wb');
+  if(un.length>0){wb.style.display='block';wb.textContent='以下题目未作答 / Unanswered items: '+un.join(', ');wb.scrollIntoView({behavior:'smooth',block:'center'});return;}
+  wb.style.display='none';
+
+  var tot=ans.reduce(function(s,a){return s+a;},0);
+  var p=Math.round(tot/285*100);
+  var avg=(tot/57).toFixed(2);
+
+  // Build form data for Formspree
+  var data={
+    '儿童姓名 Child Name': document.getElementById('fn').value||'—',
+    '年龄 Age': document.getElementById('fa').value||'—',
+    '年级 Grade': document.getElementById('fg').value||'—',
+    '评估日期 Date': document.getElementById('fd').value||'—',
+    '填表人 Rater': document.getElementById('fr').value||'—',
+    '关系 Relationship': document.getElementById('frl').value||'—',
+    '总分 Total Score': tot+' / 285',
+    '百分比 Percentage': p+'%',
+    '平均分 Average': avg,
+    '_subject': 'DCCC 评估提交 — '+(document.getElementById('fn').value||'未填写姓名')
+  };
+  for(var i=0;i<57;i++){
+    data[itemLabels[i]]=scaleText[ans[i]];
+  }
+
+  // Show loading state
+  var btn=document.querySelector('.btnp');
+  btn.textContent='提交中... Submitting...';
+  btn.disabled=true;
+
+  fetch('https://formspree.io/f/mqenzqeb',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body:JSON.stringify(data)
+  }).then(function(res){
+    if(res.ok){
+      document.getElementById('rt').textContent=tot+'/285';
+      document.getElementById('rp').textContent=p+'%';
+      document.getElementById('ra').textContent=avg;
+      var rc=document.getElementById('rc');
+      rc.style.display='block';
+      document.getElementById('rc-msg').style.display='block';
+      rc.scrollIntoView({behavior:'smooth',block:'center'});
+      btn.textContent='已提交 Submitted ✓';
+      btn.style.background='#2a7a4b';
+    } else {
+      btn.textContent='提交评估 Submit';
+      btn.disabled=false;
+      alert('提交失败，请重试。Submission failed, please try again.');
+    }
+  }).catch(function(){
+    btn.textContent='提交评估 Submit';
+    btn.disabled=false;
+    alert('网络错误，请检查连接后重试。Network error, please check your connection.');
+  });
+}
+function rst(){
+  ans.fill(0);
+  document.querySelectorAll('input[type=radio]').forEach(function(r){r.checked=false;});
+  document.getElementById('sv').textContent='—';
+  document.getElementById('al').textContent='0 / 57 项已填写';
+  document.getElementById('pl').textContent='';
+  document.getElementById('pf').style.width='0%';
+  document.getElementById('wb').style.display='none';
+  document.getElementById('rc').style.display='none';
+  ['fn','fa','fd','fr'].forEach(function(id){document.getElementById(id).value='';});
+  ['fg','frl'].forEach(function(id){document.getElementById(id).selectedIndex=0;});
+  var btn=document.querySelector('.btnp');
+  btn.textContent='提交评估 Submit';
+  btn.disabled=false;
+  btn.style.background='';
+  document.getElementById('rc-msg').style.display='none';
+}
+document.getElementById('fd').value=new Date().toISOString().split('T')[0];
+</script>
+</body>
+</html>
